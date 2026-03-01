@@ -40,6 +40,7 @@ export default function App() {
   const [editMode,   setEditMode]   = useState(false);
   const [editTarget, setEditTarget] = useState(null);
   const [pdfState,   setPdfState]   = useState('idle'); // 'idle' | 'exporting'
+  const [svgState,   setSvgState]   = useState('idle'); // 'idle' | 'exporting'
 
   // Keep a ref in sync so handleSave can read the latest without stale closure
   const recordsRef = useRef(records);
@@ -141,6 +142,34 @@ export default function App() {
     }
   }, [pdfState]);
 
+  // ── Export board as SVG ───────────────────────────────────────────────────
+  const exportToSVG = useCallback(async () => {
+    const board = boardRef.current;
+    if (!board || svgState === 'exporting') return;
+
+    setSvgState('exporting');
+    try {
+      const { toSvg } = await import('html-to-image');
+
+      const dataUrl = await toSvg(board, {
+        width: 2000,
+        height: 1000,
+        style: { margin: '0' },
+      });
+
+      const link = document.createElement('a');
+      link.download = `west-side-record-board-${new Date().getFullYear()}.svg`;
+      link.href = dataUrl;
+      link.click();
+
+      setSvgState('idle');
+    } catch (err) {
+      console.error('SVG export failed:', err);
+      setSvgState('idle');
+      alert('SVG export failed. See console for details.');
+    }
+  }, [svgState]);
+
   // ── Render states ─────────────────────────────────────────────────────────
   if (loadState === 'loading') {
     return (
@@ -208,6 +237,15 @@ export default function App() {
             title="Capture board as a 36″ × 18″ poster PDF"
           >
             {pdfState === 'exporting' ? '⏳ Generating…' : '⎙ Export PDF'}
+          </button>
+
+          <button
+            className={'tool-btn print-btn' + (svgState === 'exporting' ? ' exporting' : '')}
+            onClick={exportToSVG}
+            disabled={svgState === 'exporting'}
+            title="Export board as an SVG file"
+          >
+            {svgState === 'exporting' ? '⏳ Generating…' : '⎙ Export SVG'}
           </button>
         </div>
       </div>

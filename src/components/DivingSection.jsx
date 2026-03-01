@@ -33,9 +33,9 @@ function DivingRow({ girl, boy, editMode, onEdit }) {
             {editMode && (
               <button className="edit-btn" title="Edit" onClick={() => onEdit('boys', boy)}>✎</button>
             )}
-            <span className="rec-time boys-time">{boy.time}</span>
-            <span className="rec-year">{boy.year}</span>
-            <RecordName name={boy.name} side="boys" />
+              <RecordName name={boy.name} side="boys" />
+              <span className="rec-time boys-time">{boy.time}</span>
+              <span className="rec-year">{boy.year}</span>
           </>
         ) : null}
       </div>

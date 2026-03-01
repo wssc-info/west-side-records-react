@@ -155,11 +155,11 @@ body {
   display: grid;
   grid-template-columns: 1fr 120px 1fr;
   align-items: center;
-  /*border-bottom: 1px solid #e0eaf0;*/
+  border-bottom: 1px solid #e0eaf0;
   min-height: 16px;
   position: relative;
 }
-/*.record-row:last-child { border-bottom: none; }*/
+.record-row:last-child { border-bottom: none; }
 /*.record-row:nth-child(even) { background: var(--row-alt); }*/
 .record-row:hover { background: #deeef8; }
 
@@ -178,25 +178,22 @@ body {
 .rec-name {
   font-size: 0.63rem;
   color: var(--text-dark);
-  /*width: 140px;*/
   flex: 1;
-  /* flex container so comma-separated names can wrap as a group */
+  /* stack paired lines vertically; each line holds 1–2 names */
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 3px;
-  align-content: flex-start;
+  flex-direction: column;
 }
-.girls-name { justify-content: flex-start; }
-.boys-name  { justify-content: flex-end;   }
+.girls-name { align-items: flex-start; }
+.boys-name  { align-items: flex-start;   }
 
-/* Each individual name token never breaks mid-name */
-.rec-name-part { white-space: nowrap; }
+/* Each line (up to 2 names joined) never wraps mid-line */
+.rec-name-line { white-space: nowrap; }
 
 .rec-year {
   font-size: 0.6rem;
   color: var(--text-grey);
   white-space: nowrap;
-  min-width: 30px;
+  width: 40px;
   text-align: center;
   flex-shrink: 0;
 }
@@ -206,11 +203,11 @@ body {
   /*font-weight: 700;*/
   /*color: var(--text-dark);*/
   white-space: nowrap;
-  min-width: 36px;
+  width: 50px;
   flex-shrink: 0;
 }
 .girls-time { text-align: right; }
-.boys-time  { text-align: left;  }
+.boys-time  { text-align: right;  }
 
 /* Event column */
 .event-col {
