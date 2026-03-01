@@ -9,19 +9,18 @@
  * original board tracks "8 & UNDER" with keys that read "9-10", etc.
  */
 export const AGE_GROUP_LABEL = {
-  '9-10':             '8 & UNDER',
-  '11-12':            '9 - 10',
-  '13-14':            '11 - 12',
-  '15-18':            '13 - 14',
-  '15-18_200IM':      '15 - 18',
-  '15-18_200events':  '15 - 18',
+  '8Under':             '8 & UNDER',
+  '9-10':            '9 - 10',
+  '11-12':            '11 - 12',
+  '13-14':            '13 - 14',
+  '15-18':      '15 - 18',
 };
 
 /** Ordered list of JSON age-group keys for the Team Records panel. */
-export const TEAM_AGE_ORDER = ['9-10', '11-12', '13-14', '15-18', '15-18_200IM'];
+export const TEAM_AGE_ORDER = ['8Under', '9-10', '11-12', '13-14', '15-18'];
 
 /** Ordered list of JSON age-group keys for the Pool Records panel. */
-export const POOL_AGE_ORDER = ['9-10', '11-12', '13-14', '15-18', '15-18_200events'];
+export const POOL_AGE_ORDER = ['8Under', '9-10', '11-12', '13-14', '15-18'];
 
 /**
  * API base URL — set VITE_RECORDS_API in your .env file.
