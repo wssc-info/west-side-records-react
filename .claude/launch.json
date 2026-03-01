@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "west-side-records-react",
+      "runtimeExecutable": "/opt/homebrew/Cellar/node/25.6.1_1/bin/npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5174"],
+      "port": 5174,
+      "cwd": "/Users/tony/IdeaProjects/west-side-records-react"
+    }
+  ]
+}
