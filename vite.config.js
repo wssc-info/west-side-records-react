@@ -8,7 +8,8 @@ export default defineConfig({
   build: {
     // Output directly into the PHP project so one server serves everything.
     outDir: '../phpRecordManagement',
-    emptyOutDir: false,   // don't wipe PHP files — only overwrites index.html + assets/
+    assetsDir: 'assets/build',  // keeps built files in a subfolder — delete assets/ root files when ready
+    emptyOutDir: false,   // don't wipe PHP files — only overwrites index.html + assets/build/
   },
 
   server: {

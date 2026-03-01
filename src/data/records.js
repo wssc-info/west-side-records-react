@@ -27,4 +27,4 @@ export const POOL_AGE_ORDER = ['9-10', '11-12', '13-14', '15-18', '15-18_200even
  * API base URL — set VITE_RECORDS_API in your .env file.
  * Falls back to the PHP dev server on the standard port.
  */
-export const API_URL = import.meta.env.VITE_RECORDS_API ?? 'http://localhost:8000/api/records.php';
+export const API_URL = import.meta.env.VITE_RECORDS_API ?? 'http://localhost:8080/api/records.php';

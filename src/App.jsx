@@ -270,6 +270,7 @@ export default function App() {
                     boys={divingRecords.team.boys}
                     editMode={editMode}
                     onEdit={setEditTarget}
+                    showBoyGirlsLabels={true}
                 />
                 <DivingSection
                     title="POOL DIVING RECORDS"
@@ -277,6 +278,7 @@ export default function App() {
                     boys={divingRecords.pool.boys}
                     editMode={editMode}
                     onEdit={setEditTarget}
+                    showBoyGirlsLabels={false}
                 />
               </div>
             </div>

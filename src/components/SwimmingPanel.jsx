@@ -10,7 +10,7 @@ export default function SwimmingPanel({ title, ageGroups, ageOrder, editMode, on
     <div className="swimming-panel">
       <h2 className="panel-title">{title}</h2>
 
-      {ageOrder.map((key) => {
+      {ageOrder.map((key, idx) => {
         const group  = ageGroups[key];
         const girls  = group?.girls ?? [];
         const boys   = group?.boys  ?? [];
@@ -21,9 +21,9 @@ export default function SwimmingPanel({ title, ageGroups, ageOrder, editMode, on
           <div className="age-group" key={key}>
             {/* Age-group header row */}
             <div className="age-group-header">
-              <span className="gender-label">GIRLS</span>
+              <span className="gender-label">{idx === 0 ? 'GIRLS' : ''}</span>
               <span className="age-label">{label}</span>
-              <span className="gender-label">BOYS</span>
+              <span className="gender-label">{idx === 0 ? 'BOYS' : ''}</span>
             </div>
 
             {/* Record rows */}

@@ -43,16 +43,16 @@ function DivingRow({ girl, boy, editMode, onEdit }) {
   );
 }
 
-export default function DivingSection({ title, girls, boys, editMode, onEdit }) {
+export default function DivingSection({ title, girls, boys, editMode, onEdit, showBoyGirlsLabels }) {
   const maxLen = Math.max(girls.length, boys.length);
   return (
     <div className="diving-panel">
       <h3 className="diving-title">{title}</h3>
 
       <div className="age-group-header">
-        <span className="gender-label">GIRLS</span>
+        <span className="gender-label">{showBoyGirlsLabels && 'GIRLS'}</span>
         <span className="age-label" />
-        <span className="gender-label">BOYS</span>
+        <span className="gender-label">{showBoyGirlsLabels && 'BOYS'}</span>
       </div>
 
       {Array.from({ length: maxLen }).map((_, i) => (
