@@ -64,6 +64,9 @@ body {
 .tool-btn.active { background: var(--blue); border-color: var(--blue); }
 .tool-btn.reset-btn { border-color: rgba(255,80,80,0.5); }
 .tool-btn.reset-btn:hover { background: rgba(220,60,60,0.2); }
+.tool-btn.print-btn { border-color: rgba(100,202,221,0.6); }
+.tool-btn.print-btn:hover { background: rgba(100,202,221,0.15); }
+.tool-btn.print-btn.exporting { opacity: 0.6; cursor: wait; }
 
 /* ── Board outer scroll wrapper ─────────────────────────────── */
 .board-outer {
@@ -76,8 +79,8 @@ body {
 .board {
   background: var(--board-bg);
   /*border: 6px solid var(--navy);*/
-  min-width: 900px;
-  max-width: 1640px;
+  width: 2000px;
+  height: 1000px;
   /*margin: 0 auto;*/
   /*box-shadow: 0 4px 20px rgba(0,0,0,0.4);*/
 }
@@ -175,7 +178,8 @@ body {
 .rec-name {
   font-size: 0.63rem;
   color: var(--text-dark);
-  width: 140px;
+  /*width: 140px;*/
+  flex: 1;
   /* flex container so comma-separated names can wrap as a group */
   display: flex;
   flex-wrap: wrap;
@@ -240,7 +244,6 @@ body {
 
 /* ── Center logo column ─────────────────────────────────────── */
 .center-panel {
-  padding-top: 80px;
 }
 
 .center-logo {
@@ -523,3 +526,4 @@ body {
   .board-diving { grid-template-columns: 1fr; }
   .diving-divider { height: 2px; width: 100%; }
 }
+

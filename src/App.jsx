@@ -33,16 +33,20 @@ function applyUpdate(prev, { updates, panel, ageKey, gender, idx, title }) {
 
 // ─── component ───────────────────────────────────────────────────────────────
 export default function App() {
-  const [records,    setRecords]    = useState(null);   // null = not yet loaded
-  const [loadState,  setLoadState]  = useState('loading'); // 'loading' | 'ok' | 'error'
+  const [records,    setRecords]    = useState(null);
+  const [loadState,  setLoadState]  = useState('loading');
   const [loadError,  setLoadError]  = useState('');
-  const [saveStatus, setSaveStatus] = useState('idle');  // 'idle' | 'saving' | 'saved' | 'error'
+  const [saveStatus, setSaveStatus] = useState('idle');
   const [editMode,   setEditMode]   = useState(false);
   const [editTarget, setEditTarget] = useState(null);
+  const [pdfState,   setPdfState]   = useState('idle'); // 'idle' | 'exporting'
 
   // Keep a ref in sync so handleSave can read the latest without stale closure
   const recordsRef = useRef(records);
   useEffect(() => { recordsRef.current = records; }, [records]);
+
+  // Ref to the board element for PDF capture
+  const boardRef = useRef(null);
 
   // ── Fetch records from API on mount ───────────────────────────────────────
   const fetchRecords = useCallback(() => {
@@ -68,13 +72,12 @@ export default function App() {
 
   // ── Save a single record edit ─────────────────────────────────────────────
   const handleSave = useCallback((editPayload) => {
-    const prev = recordsRef.current;          // capture before optimistic update
+    const prev = recordsRef.current;
     const next = applyUpdate(prev, editPayload);
-    setRecords(next);                         // optimistic update
+    setRecords(next);
     setEditTarget(null);
     setSaveStatus('saving');
 
-    // Send only the delta — the PHP PATCH handler navigates to the right record
     const { panel, ageKey, gender, idx, title, updates } = editPayload;
 
     fetch(API_URL, {
@@ -93,9 +96,50 @@ export default function App() {
       .catch((err) => {
         setSaveStatus('error');
         console.error('Save error:', err);
-        setRecords(prev);   // roll back to state captured before optimistic update
+        setRecords(prev);
       });
   }, []);
+
+  // ── Export board as poster PDF ────────────────────────────────────────────
+  const exportToPDF = useCallback(async () => {
+    const board = boardRef.current;
+    if (!board || pdfState === 'exporting') return;
+
+    setPdfState('exporting');
+    try {
+      // Lazy-load the heavy libs so they don't bloat the initial bundle
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+
+      // Capture the board at 3× pixel density for poster-quality output.
+      // scale:3 on a 2000×1000 board → 6000×3000px canvas ≈ 167 DPI on 36".
+      const canvas = await html2canvas(board, {
+        scale: 3,
+        useCORS: true,          // allow cross-origin images (e.g. centerlogo.png)
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
+
+      // Build a landscape PDF at 36"×18" (2:1, matching the board)
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'in',
+        format: [36, 18],
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      pdf.addImage(imgData, 'JPEG', 0, 0, 36, 18);
+      pdf.save(`west-side-record-board-${new Date().getFullYear()}.pdf`);
+
+      setPdfState('idle');
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      setPdfState('idle');
+      alert('PDF export failed. See console for details.');
+    }
+  }, [pdfState]);
 
   // ── Render states ─────────────────────────────────────────────────────────
   if (loadState === 'loading') {
@@ -156,12 +200,21 @@ export default function App() {
           >
             ↺ Reload
           </button>
+
+          <button
+            className={'tool-btn print-btn' + (pdfState === 'exporting' ? ' exporting' : '')}
+            onClick={exportToPDF}
+            disabled={pdfState === 'exporting'}
+            title="Capture board as a 36″ × 18″ poster PDF"
+          >
+            {pdfState === 'exporting' ? '⏳ Generating…' : '⎙ Export PDF'}
+          </button>
         </div>
       </div>
 
       {/* ── Board ────────────────────────────────────────────── */}
       <div className="board-outer">
-        <div className="board">
+        <div className="board" ref={boardRef}>
           <div className="board-main">
             <SwimmingPanel
               title="TEAM SWIMMING RECORDS"
@@ -197,7 +250,6 @@ export default function App() {
               onEdit={setEditTarget}
             />
           </div>
-
         </div>
       </div>
 
