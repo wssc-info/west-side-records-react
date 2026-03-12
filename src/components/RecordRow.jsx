@@ -42,8 +42,8 @@ export default function RecordRow({ girl, boy, onEdit, editMode }) {
               >✎</button>
             )}
               <RecordName name={boy.name} side="boys" />
-              <span className="rec-time boys-time">{boy.time}</span>
               <span className="rec-year">{boy.year}</span>
+              <span className="rec-time boys-time">{boy.time}</span>
           </>
         ) : <span className="empty-side" />}
       </div>

@@ -79,12 +79,14 @@ export default function App() {
     setEditTarget(null);
     setSaveStatus('saving');
 
-    const { panel, ageKey, gender, idx, title, updates } = editPayload;
+    const { panel, ageKey, gender, idx, title, updates, rec } = editPayload;
+    // event identifies the row in the DB; swimming uses rec.event, diving uses rec.ageGroup
+    const event = rec?.event ?? rec?.ageGroup ?? null;
 
     fetch(API_URL, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ panel, ageKey, gender, idx, title, updates }),
+      body: JSON.stringify({ panel, ageKey, gender, idx, title, updates, event }),
     })
       .then((res) => {
         if (!res.ok) throw new Error(`Save failed: ${res.status}`);
@@ -207,9 +209,25 @@ export default function App() {
     <div className="app-shell">
       {/* ── Toolbar ──────────────────────────────────────────── */}
       <div className="toolbar">
-        <span className="toolbar-title">
-          West Side Swim Club &mdash; Record Board {records.year}
-        </span>
+        <div className="toolbar-left">
+          <span className="toolbar-title">
+            West Side Swim Club &mdash; Record Board {records.year}
+          </span>
+          <a
+            className="tool-btn"
+            href="/data/records.json"
+            target="_blank"
+            rel="noreferrer"
+            title="Open live records.json"
+          >Records</a>
+          <a
+            className="tool-btn"
+            href="/data/changes.log"
+            target="_blank"
+            rel="noreferrer"
+            title="Open live changes.log"
+          >Changes</a>
+        </div>
         <div className="toolbar-actions">
           {saveStatus === 'saving' && <span className="save-badge saving">Saving…</span>}
           {saveStatus === 'saved'  && <span className="save-badge saved">✓ Saved</span>}

@@ -1,15 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// Timestamp for this build — each run creates assets/yyyyMMddHHmm/
+// so you can see at a glance which folder is current and delete the old one.
+const buildDate = new Date().toISOString().slice(0, 16).replace(/[-T:]/g, '')  // e.g. '202603011423'
+
 export default defineConfig({
   plugins: [react()],
 
   build: {
     // Output directly into the PHP project so one server serves everything.
     outDir: '../phpRecordManagement',
-    assetsDir: 'assets/build',  // keeps built files in a subfolder — delete assets/ root files when ready
-    emptyOutDir: false,   // don't wipe PHP files — only overwrites index.html + assets/build/
+    assetsDir: `assets/${buildDate}`,  // e.g. assets/202603011423/
+    emptyOutDir: false,   // don't wipe PHP files — only overwrites index.html + assets/<timestamp>/
   },
 
   server: {

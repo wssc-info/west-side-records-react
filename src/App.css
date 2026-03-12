@@ -49,7 +49,8 @@ body {
   gap: 12px;
   flex-shrink: 0;
 }
-.toolbar-title { font-weight: 700; letter-spacing: 0.05em; }
+.toolbar-left   { display: flex; align-items: center; gap: 12px; }
+.toolbar-title  { font-weight: 700; letter-spacing: 0.05em; }
 .toolbar-actions { display: flex; gap: 8px; }
 
 .tool-btn {
@@ -61,6 +62,7 @@ body {
   font-family: var(--font);
   font-size: 0.78rem;
   cursor: pointer;
+  text-decoration: none;   /* covers <a> tags used as toolbar links */
   transition: background 0.15s;
 }
 .tool-btn:hover  { background: rgba(255,255,255,0.12); }
@@ -129,7 +131,7 @@ body {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 13px 4px;
+  padding: 10px 4px;
   /*background: #eef4f8;*/
   /*border-top: 1px solid var(--divider);*/
   /*border-bottom: 1px solid var(--divider);*/
@@ -519,7 +521,7 @@ body {
 .save-badge.saved   { background: rgba(50,200,80,0.25);  color: #7de8a0; }
 .save-badge.save-err{ background: rgba(220,60,60,0.25);  color: #f4a0a0; }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+/* ── Responsive ───────────────────────────────────────────────
 @media (max-width: 800px) {
   .board-main {
     grid-template-columns: 1fr;
@@ -529,4 +531,4 @@ body {
   .board-diving { grid-template-columns: 1fr; }
   .diving-divider { height: 2px; width: 100%; }
 }
-
+ */
