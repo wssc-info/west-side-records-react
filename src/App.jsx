@@ -4,6 +4,7 @@ import CenterLogo    from './components/CenterLogo';
 import SwimmingPanel from './components/SwimmingPanel';
 import DivingSection from './components/DivingSection';
 import EditModal     from './components/EditModal';
+import HistoryPage   from './components/HistoryPage';
 import './App.css';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -41,6 +42,7 @@ export default function App() {
   const [editTarget, setEditTarget] = useState(null);
   const [pdfState,   setPdfState]   = useState('idle'); // 'idle' | 'exporting'
   const [svgState,   setSvgState]   = useState('idle'); // 'idle' | 'exporting'
+  const [page,       setPage]       = useState('board'); // 'board' | 'history'
 
   // Keep a ref in sync so handleSave can read the latest without stale closure
   const recordsRef = useRef(records);
@@ -227,6 +229,11 @@ export default function App() {
             rel="noreferrer"
             title="Open live changes.log"
           >Changes</a>
+          <button
+            className={'tool-btn' + (page === 'history' ? ' active' : '')}
+            onClick={() => setPage((p) => p === 'history' ? 'board' : 'history')}
+            title="View record change history"
+          >&#128338; History</button>
         </div>
         <div className="toolbar-actions">
           {saveStatus === 'saving' && <span className="save-badge saving">Saving…</span>}
@@ -268,48 +275,52 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── Board ────────────────────────────────────────────── */}
-      <div className="board-outer">
-        <div className="board" ref={boardRef}>
-          <div className="board-main">
-            <SwimmingPanel
-              title="TEAM SWIMMING RECORDS"
-              ageGroups={teamRecords.ageGroups}
-              ageOrder={TEAM_AGE_ORDER}
-              editMode={editMode}
-              onEdit={setEditTarget}
-            />
-            <div className="center-panel">
-              <CenterLogo />
-              <div className="board-diving">
-                <DivingSection
-                    title="TEAM DIVING RECORDS"
-                    girls={divingRecords.team.girls}
-                    boys={divingRecords.team.boys}
-                    editMode={editMode}
-                    onEdit={setEditTarget}
-                    showBoyGirlsLabels={true}
-                />
-                <DivingSection
-                    title="POOL DIVING RECORDS"
-                    girls={divingRecords.pool.girls}
-                    boys={divingRecords.pool.boys}
-                    editMode={editMode}
-                    onEdit={setEditTarget}
-                    showBoyGirlsLabels={false}
-                />
+      {/* ── Board / History ───────────────────────────────────── */}
+      {page === 'history' ? (
+        <HistoryPage />
+      ) : (
+        <div className="board-outer">
+          <div className="board" ref={boardRef}>
+            <div className="board-main">
+              <SwimmingPanel
+                title="TEAM SWIMMING RECORDS"
+                ageGroups={teamRecords.ageGroups}
+                ageOrder={TEAM_AGE_ORDER}
+                editMode={editMode}
+                onEdit={setEditTarget}
+              />
+              <div className="center-panel">
+                <CenterLogo />
+                <div className="board-diving">
+                  <DivingSection
+                      title="TEAM DIVING RECORDS"
+                      girls={divingRecords.team.girls}
+                      boys={divingRecords.team.boys}
+                      editMode={editMode}
+                      onEdit={setEditTarget}
+                      showBoyGirlsLabels={true}
+                  />
+                  <DivingSection
+                      title="POOL DIVING RECORDS"
+                      girls={divingRecords.pool.girls}
+                      boys={divingRecords.pool.boys}
+                      editMode={editMode}
+                      onEdit={setEditTarget}
+                      showBoyGirlsLabels={false}
+                  />
+                </div>
               </div>
+              <SwimmingPanel
+                title="POOL SWIMMING RECORDS"
+                ageGroups={poolRecords.ageGroups}
+                ageOrder={POOL_AGE_ORDER}
+                editMode={editMode}
+                onEdit={setEditTarget}
+              />
             </div>
-            <SwimmingPanel
-              title="POOL SWIMMING RECORDS"
-              ageGroups={poolRecords.ageGroups}
-              ageOrder={POOL_AGE_ORDER}
-              editMode={editMode}
-              onEdit={setEditTarget}
-            />
           </div>
         </div>
-      </div>
+      )}
 
       <EditModal
         target={editTarget}
